@@ -250,7 +250,7 @@ public:
 				//std::cout << "overall_net_latency_().count()         = " << overall_net_latency_().count() << std::endl;
 				//std::cout << "overall_net_latency_from_rg_().count() = " << overall_net_latency_from_rg_().count() << std::endl;
 
-				std::cout << "Total average latency " << overall_net_latency_from_rg_().count() << "\n" << std::flush;
+				std::cout << "Total average latency (ns): " << overall_net_latency_from_rg_().count() << "\n" << std::flush;
 
 				// multiplying by 1/1000 in order to obtain microseconds
 				double overall_net_lat	= overall_net_latency_().count() / nsteps_ * 1.e-3;
