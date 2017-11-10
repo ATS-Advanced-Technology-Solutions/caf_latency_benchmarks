@@ -1,6 +1,8 @@
 # What is this project about
 
-This project provides a suite of benchmarks to test **[C++ Actor Framework](https://www.actor-framework.org/)**  performances with a specific attention to _latencies_.
+This project provides a suite of benchmarks for **[C++ Actor Framework](https://www.actor-framework.org/)**.
+All benchamarks focus on  _latency_ performances while controlling _throughput_.
+The main goal is to measure CAF _reactivity_ at **high message rates** as well as at **very low message rates**.
 
 
 
