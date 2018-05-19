@@ -164,7 +164,7 @@ namespace _0lf
         {   return P{N}; }
 
         //! Constructor
-        inline mobile_average_value () noexcept = default;
+        inline mobile_average_value () = default;
 
         //! Counts the given value
         inline mobile_average_value& tick (V value) noexcept
@@ -224,7 +224,7 @@ namespace _0lf
         {   return P{N}; }
 
         //! Constructor
-        inline mobile_average_ticks () noexcept = default;
+        inline mobile_average_ticks () = default;
 
         //! Count the given value
         inline mobile_average_ticks& tick () noexcept

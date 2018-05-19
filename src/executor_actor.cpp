@@ -304,29 +304,33 @@ public:
             {
                 quit();
             },
-			[&](parallel_update_metrics_a)
-			{
-				unsigned int detached_send = 0;
-				unsigned int detached_receive = 0;
-				unsigned int message_passing_latency = 0;
-				unsigned int message_computation_latency = 0;
-				unsigned int first_latency = 0;
+	      [&](parallel_update_metrics_a)
+		{
+		  unsigned int detached_send = 0;
+		  unsigned int detached_receive = 0;
+		  unsigned int message_passing_latency = 0;
+		  unsigned int message_computation_latency = 0;
+		  unsigned int first_latency = 0;
+		  
+		  analyze_cross_times(ct_overall_net_latency_(), first_latency, detached_send, detached_receive, message_passing_latency, message_computation_latency);
+		  
+		  
+		  delayed_send(this, update_time_, parallel_update_metrics_a::value);
+		},
+		[&](parallel_benchmark_a)
+		  {
+		    
+		    total_latency_.restart();
+		    
+		    spawn_rate_generator(home_system(), heads_, results_collector_);
 
-				analyze_cross_times(ct_overall_net_latency_(), first_latency, detached_send, detached_receive, message_passing_latency, message_computation_latency);
-
-
-				delayed_send(this, update_time_, parallel_update_metrics_a::value);
-			},
-			[&](parallel_benchmark_a)
-			{
-
-				total_latency_.restart();
-
-				spawn_rate_generator(home_system(), heads_, results_collector_);
-				delayed_send(this, update_time_, parallel_update_metrics_a::value);
-				if(benchmark_duration_.count() > 0)
-					delayed_send(this, benchmark_duration_, parallel_kill_a::value);
-			}
+		    printf("spawned rate generator\n");
+		    
+		    delayed_send(this, update_time_, parallel_update_metrics_a::value);
+		    if(benchmark_duration_.count() > 0) {
+		      delayed_send(this, benchmark_duration_, parallel_kill_a::value);
+		    }
+		  }
 		};
 	}
 

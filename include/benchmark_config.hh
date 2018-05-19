@@ -54,9 +54,17 @@ public:
 	
 	//! To spawn the x-th actor in detached mode (x belongs to [0, pipeline_actors_-1] interval, otherwise no detached actor will be spawned);
 	unsigned int detached_actor_;
+
+	//! Number of detached actors present in the pool of "external" actors. These actors just receive a message from the detached actor (so make sense only if detached_actor_ is defined).
+	unsigned int detached_pool_;	
+
+	unsigned int sender_to_detached_;
 	
 	//! Defines the message route
 	bool forth_and_back_;
+
+	//! Detached actor work time (microseconds)
+	std::chrono::microseconds detached_work_time_;	
     };
     
     //! Information about the parallel benchmark type
@@ -148,7 +156,10 @@ private:
 	std::string extension_;
 	std::string output_file_;
 	unsigned int detached_actor_;
+	unsigned int detached_pool_;
+	unsigned int sender_to_detached_;
 	unsigned int forth_and_back_;
+	unsigned int detached_work_time_;
 	
 	//default values
 	general_internal()
@@ -161,7 +172,10 @@ private:
 	      extension_("txt"),
 	      output_file_("benchmark_result"),
 	      detached_actor_(UINT_MAX),
-	      forth_and_back_(false)
+	      detached_pool_(0),
+	      sender_to_detached_(UINT_MAX),
+	      forth_and_back_(false),
+	      detached_work_time_(100)
 	{}
     };
     

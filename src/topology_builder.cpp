@@ -40,6 +40,20 @@ public:
 				N_ = cfg.general_.pipeline_actors_;
 				counter_ = N_;
 				detached_actor_ = cfg.general_.detached_actor_;
+
+				unsigned int D = cfg.general_.detached_pool_;
+				
+				// spawn the pool of detached actors used as "external" actors
+				for (unsigned int i = 0; i < D; ++i) {
+				    actor new_actor = spawn_benchmark_actor(home_system(), true);
+				    dpool_.emplace_back(new_actor);
+				}
+				for (unsigned int i = 0; i < D; i++) {
+				    request(dpool_[i], infinite, init_detached_a::value, i).then(
+							[](unit_t) mutable {
+							});
+				}
+				
 			},
 			[&](make_linear_chain_a)
 			{
@@ -62,7 +76,7 @@ public:
 						next = bench_actors[i + 1];
 
 					request(bench_actors[i], infinite, init_bench_a::value,
-						previous, next, executor_, i).then(
+						previous, next, executor_, i, dpool_).then(
 							[=](unit_t) mutable {
 							counter_--;
 							if (counter_ == 0) {
@@ -71,7 +85,7 @@ public:
 								bench_actors.clear();
 							}
 					});
-				}
+				}				
 			},
 			[&](topo_kill_a)
 			{
@@ -87,6 +101,8 @@ private:
 	unsigned int detached_actor_;
 	int counter_;
 	actor executor_;
+        // pool of 'external' detached actors
+        vector<actor> dpool_;
 };
 
 actor spawn_topology_builder(actor_system & system)

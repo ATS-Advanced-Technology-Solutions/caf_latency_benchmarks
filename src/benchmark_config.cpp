@@ -61,7 +61,10 @@ benchmark_config::benchmark_config(const std::string& cfg_ini_file, int argc, ch
 	 .add(general_internal_.extension_,		"extension",		"Extension of the output file (default is csv)")
 	 .add(general_internal_.output_file_,		"output_file",		"File name in which store the results (_serial or _parallel will be added depending on the benchmark type)")
 	 .add(general_internal_.detached_actor_,	"detach",		"Actor chain number, included in [0,N-1] interval, to spawn in detached mode (default = no actor detached)")
-	 .add(general_internal_.forth_and_back_,	"forth_and_back",	"Defines message route (default is 0)");
+	 .add(general_internal_.forth_and_back_,	"forth_and_back",	"Defines message route (default is 0)")
+	 .add(general_internal_.detached_pool_,         "detached_pool",        "Number of detached actors in the pool of 'external' actors (default = 0)")
+	 .add(general_internal_.sender_to_detached_,    "sender_to_detached",   "Actor in the chain that sends messages to one actor of the pool of 'external' actors (default = none)")
+	 .add(general_internal_.detached_work_time_,    "detached_work_time",   "Work time (microseconds) of the actors in the pool of 'external' detached actors (default is 100)");
     
     opt_group{ custom_options_, "parallel" }
     .add(parallel_.rate_,		"rate,r",		"Frequency of messages introduced into the benchmark's pipeline (messages per second, default is 100.0)")
@@ -92,6 +95,8 @@ void benchmark_config::convert_gen_internal_to_external(general_internal& intern
     external_struct.output_file_           = internal_struct.output_file_;
     external_struct.detached_actor_        = internal_struct.detached_actor_;
     external_struct.forth_and_back_        = internal_struct.forth_and_back_ > 0;
+    external_struct.detached_pool_         = internal_struct.detached_pool_;
+    external_struct.detached_work_time_    = std::chrono::microseconds(internal_struct.detached_work_time_);
 }
 
 void benchmark_config::convert_payl_internal_to_external(payload_internal& internal_str, payload& payload_str) {

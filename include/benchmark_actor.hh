@@ -15,6 +15,9 @@
 
 using init_bench_a = caf::atom_constant<caf::atom("init_b")>;
 
+using init_detached_a = caf::atom_constant<caf::atom("init_d")>;
+using detached_msg_a = caf::atom_constant<caf::atom("d_msg")>;
+
 using weightless_a = caf::atom_constant<caf::atom("weightless")>;
 using weightless_back_a = caf::atom_constant<caf::atom("weigh_back")>;
 
